@@ -1,21 +1,9 @@
-// create a new WeakMap instance
 export const weakMap = new WeakMap();
 
-// function to query an API endpoint
+// https://stackoverflow.com/questions/29413222/what-are-the-actual-uses-of-es6-weakmap
 export function queryAPI(endpoint) {
-  // initialize the number of API calls to 0
-  let numCalls = 0;
-
-  // if the endpoint already exists in the map, get the number of previous calls
-  if (weakMap.has(endpoint)) {
-    numCalls = weakMap.get(endpoint);
-  }
-
-  // increment the number of API calls for the endpoint by 1 and update the map
-  weakMap.set(endpoint, numCalls + 1);
-
-  // if the number of API calls for the endpoint exceeds 5, throw an error
-  if (numCalls + 1 >= 5) {
-    throw new Error('Endpoint load is high');
-  }
+  let called = 0;
+  if (weakMap.get(endpoint)) called = weakMap.get(endpoint);
+  weakMap.set(endpoint, called + 1);
+  if (called + 1 >= 5) throw new Error('Endpoint load is high');
 }
